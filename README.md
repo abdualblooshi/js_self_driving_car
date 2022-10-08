@@ -1,4 +1,4 @@
-# Self Driving Car
+# 🚗 Self Driving Car
 
 This is an open source 2D self driving car simulator created using Plain JavaScript, HTML & CSS, without the use of any external libraries.
 
