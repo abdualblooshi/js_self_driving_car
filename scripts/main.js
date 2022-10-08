@@ -10,6 +10,7 @@ animate();
 function animate() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   car.update();
+  canvas.height = window.innerHeight;
   car.draw(ctx);
   requestAnimationFrame(animate);
 }
