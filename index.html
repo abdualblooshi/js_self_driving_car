@@ -1,15 +1,34 @@
 <!DOCTYPE html>
     <head>
         <title>Self Driving Car</title>
-        <link rel="stylesheet" href="/styles/style.css">
+        <link rel="stylesheet" href="https://gitanimous.github.io/js_self_driving_car/styles/style.css">
         <link rel="favicon" href="/images/favicon.ico" type="image/x-icon">
+        <script type="text/javascript">
+            window.onload = function() {
+
+            var production = false;
+            if(window.location.href.includes("gitanimous.github.io")){
+                production = true;
+            }
+            else{
+                production = false;
+            }
+
+            appendScript = (scriptName) => {
+                var script = document.createElement('script');
+                script.src = production ? `https://gitanimous.github.io/js_self_driving_car/js/${scriptName}.js` : `/scripts/${scriptName}.js`;
+                document.body.appendChild(script);
+            }
+
+            appendScript("controls");
+            appendScript("car");
+            appendScript("main");
+        }
+        </script>
     </head>
     <body>
         <canvas id="myCanvas">
 
         </canvas>
-        <script src="../scripts/controls.js"></script>
-        <script src="../scripts/car.js"></script>
-        <script src="../scripts/main.js"></script>
     </body>
 </html>
