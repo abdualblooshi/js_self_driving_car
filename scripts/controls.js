@@ -4,8 +4,13 @@ class Controls {
     this.left = false;
     this.right = false;
     this.reverse = false;
+    this.straighten = false;
+    this.leftCount = 0;
+    this.rightCount = 0;
 
     this.#addKeyboardListeners();
+    this.#addTouchListeners();
+    this.reset();
   }
 
   #addKeyboardListeners() {
@@ -47,5 +52,70 @@ class Controls {
           break;
       }
     };
+  }
+
+  #addTouchListeners() {
+    document.addEventListener("touchstart", (event) => {
+      event.preventDefault();
+      for (let i = 0; i < event.touches.length; i++) {
+        const touch = event.touches[0];
+        const x = touch.clientX;
+        const y = touch.clientY;
+        if (event.touches.length === 1) {
+          this.forward = true;
+          if (event.target.id === "leftSide") {
+            this.left = true;
+            this.leftCount++;
+            setTimeout(() => {
+              this.left = false;
+            }, 100);
+          }
+          if (event.target.id === "rightSide") {
+            this.right = true;
+            this.rightCount++;
+            setTimeout(() => {
+              this.right = false;
+            }, 100);
+          }
+
+          if (event.target.id === "myCanvas") {
+            if (this.leftCount > this.rightCount) {
+              for (let i = 0; i < this.leftCount - this.rightCount; i++) {
+                this.right = true;
+                setTimeout(() => {
+                  this.right = false;
+                }, 100);
+              }
+              this.straighten = true;
+              setTimeout(() => {
+                this.straighten = false;
+              }, 100);
+            }
+            if (this.rightCount > this.leftCount) {
+              for (let i = 0; i < this.rightCount - this.leftCount; i++) {
+                this.left = true;
+                setTimeout(() => {
+                  this.left = false;
+                }, 100);
+              }
+              this.straighten = true;
+              setTimeout(() => {
+                this.straighten = false;
+              }, 100);
+            }
+
+            this.leftCount = 0;
+            this.rightCount = 0;
+          }
+        }
+      }
+    });
+  }
+
+  reset() {
+    this.forward = false;
+    this.left = false;
+    this.right = false;
+    this.reverse = false;
   }
 }
