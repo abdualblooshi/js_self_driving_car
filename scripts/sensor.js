@@ -9,15 +9,47 @@
 
 class Sensor {
   constructor(car) {
-    this.car = car;
-    this.rayCount = 5;
-    this.rayLength = 150;
+    this.car = car; // The car that the sensor is mounted on
+    this.rayCount = 5; // number of rays
+    this.rayLength = 150; // pixels
     this.raySpread = Math.PI / 2; // 45 degrees
-    this.rays = [];
+    this.rays = []; // array of ray start and end points
+
+    this.readings = []; // array of ray readings
   }
 
-  update() {
+  update(roadBorders) {
     this.#castRays();
+    this.readings = [];
+    for (let i = 0; i < this.rays.length; i++) {
+      const ray = this.rays[i];
+      const reading = this.#getReading(ray, roadBorders);
+      this.readings.push(reading);
+    }
+  }
+
+  #getReading(ray, roadBorders) {
+    let touches = [];
+
+    for (let i = 0; i < roadBorders.length; i++) {
+      const touch = getIntersection(
+        ray[0],
+        ray[1],
+        roadBorders[i][0],
+        roadBorders[i][1]
+      );
+      if (touch) {
+        touches.push(touch);
+      }
+    }
+
+    if (touches.length == 0) {
+      return null;
+    } else {
+      const offsets = touches.map((e) => e.offset);
+      const minOffset = Math.min(...offsets);
+      return touches.find((e) => e.offset == minOffset);
+    }
   }
 
   #castRays() {
@@ -32,8 +64,8 @@ class Sensor {
 
       const start = { x: this.car.x, y: this.car.y };
       const end = {
-        x: this.car.x - this.rayLength * Math.sin(rayAngle),
-        y: this.car.y - this.rayLength * Math.cos(rayAngle),
+        x: this.car.x - Math.sin(rayAngle) * this.rayLength,
+        y: this.car.y - Math.cos(rayAngle) * this.rayLength,
       };
       this.rays.push([start, end]);
     }
@@ -42,10 +74,23 @@ class Sensor {
   draw(ctx) {
     for (let i = 0; i < this.rays.length; i++) {
       const ray = this.rays[i];
-      ctx.strokeStyle = "#fff000";
+      let end = ray[1];
+      let reading = this.readings[i];
+      if (reading) {
+        end = reading;
+      }
       ctx.beginPath();
+      ctx.strokeStyle = "#fff000";
+      ctx.lineWidth = 2;
       ctx.moveTo(ray[0].x, ray[0].y);
-      ctx.lineTo(ray[1].x, ray[1].y);
+      ctx.lineTo(end.x, end.y);
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.lineWidth = 2;
+      ctx.strokeStyle = "#ff0000";
+      ctx.moveTo(ray[1].x, ray[1].y);
+      ctx.lineTo(end.x, end.y);
       ctx.stroke();
     }
   }
