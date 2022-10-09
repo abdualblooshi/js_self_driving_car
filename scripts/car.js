@@ -17,9 +17,12 @@ class Car {
   }
 
   update(roadBorders) {
-    this.#move();
-    this.polygon = this.#createPolygon();
-    this.damaged = this.#checkCollision(roadBorders);
+    if (!this.damaged) {
+      this.#move();
+      this.polygon = this.#createPolygon();
+      this.damaged = this.#checkCollision(roadBorders);
+    }
+
     this.sensor.update(roadBorders);
   }
 
@@ -92,11 +95,20 @@ class Car {
 
     if (this.speed != 0) {
       const flip = this.speed > 0 ? 1 : -1;
+      console.log(this.angle);
       if (this.controls.left) {
         this.angle += 0.03 * flip;
       }
       if (this.controls.right) {
         this.angle -= 0.03 * flip;
+      }
+      if (this.controls.straighten) {
+        if (this.angle > 0) {
+          this.angle -= 0.03;
+        }
+        if (this.angle < 0) {
+          this.angle += 0.03;
+        }
       }
     }
 
