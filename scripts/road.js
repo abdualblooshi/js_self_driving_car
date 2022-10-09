@@ -1,3 +1,9 @@
+/*
+    Author : @gitanimous
+    Road System
+    - contains the road and lane objects and functions to draw them
+*/
+
 class Road {
   constructor(x, width, laneCount = 3) {
     this.x = x;

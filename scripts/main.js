@@ -1,3 +1,9 @@
+/*
+  Author : @gitanimous
+  Main script file
+  - contains the simulation loop and render functions
+*/
+
 const canvas = document.getElementById("myCanvas");
 canvas.height = window.innerHeight;
 canvas.width = 200;
@@ -10,7 +16,7 @@ animate();
 
 function animate() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  car.update();
+  car.update(road.borders);
   canvas.height = window.innerHeight;
   ctx.save();
   ctx.translate(0, -car.y + canvas.height / 1.5);
