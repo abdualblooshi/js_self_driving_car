@@ -1,3 +1,9 @@
+/*
+  Author : @gitanimous
+  Main script file
+  - contains the simulation loop and render functions
+*/
+
 const canvas = document.getElementById("myCanvas");
 canvas.height = window.innerHeight;
 canvas.width = 200;
