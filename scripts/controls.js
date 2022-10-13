@@ -1,5 +1,5 @@
 class Controls {
-  constructor() {
+  constructor(type) {
     this.forward = false;
     this.left = false;
     this.right = false;
@@ -8,9 +8,30 @@ class Controls {
     this.leftCount = 0;
     this.rightCount = 0;
 
-    this.#addKeyboardListeners();
-    this.#addTouchListeners();
-    this.reset();
+    switch (type) {
+      case "KEYS":
+        this.#addKeyboardListeners();
+        this.#addTouchListeners();
+        break;
+      case "AI":
+        this.#addAILogic();
+        break;
+    }
+  }
+
+  #addAILogic() {
+    setInterval(() => {
+      this.reset();
+      this.forward = true;
+      this.straighten = true;
+      if (Math.random() > 0.5) {
+        this.left = true;
+        this.leftCount = Math.floor(Math.random() * 10);
+      } else {
+        this.right = true;
+        this.rightCount = Math.floor(Math.random() * 10);
+      }
+    }, 1000);
   }
 
   #addKeyboardListeners() {
