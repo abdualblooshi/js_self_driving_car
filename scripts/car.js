@@ -6,22 +6,27 @@ class Car {
     this.height = height;
 
     this.speed = 0;
-    this.acceleration = 0.2;
+    this.acceleration = 0.1;
     this.maxSpeed = maxSpeed;
     this.friction = 0.05;
     this.angle = 0;
     this.damaged = false;
     this.isMoving = false;
 
-    this.sensor = new Sensor(this);
+    this.target = null;
+
+    if (controlType == "KEYS") {
+      this.sensor = new Sensor(this);
+    }
+
     this.controls = new Controls(controlType);
   }
 
-  update(roadBorders) {
+  update(roadBorders, traffic) {
     if (!this.damaged) {
       this.#move();
       this.polygon = this.#createPolygon();
-      this.damaged = this.#checkCollision(roadBorders);
+      this.damaged = this.#checkCollision(roadBorders, traffic);
     }
     if (this.damaged) {
       this.isMoving = false;
@@ -36,11 +41,41 @@ class Car {
       message.style.height = "50px";
       messageText.innerHTML = "<h1>💥 You crashed!</h1>";
     }
-
-    this.sensor.update(roadBorders);
+    if (this.sensor) {
+      this.sensor.update(roadBorders, traffic);
+    }
   }
 
-  #checkCollision(roadBorders) {
+  linesIntersect(a, b, c, d) {
+    const det = (a.x - b.x) * (c.y - d.y) - (a.y - b.y) * (c.x - d.x);
+    if (det === 0) {
+      return false;
+    } else {
+      const t = ((a.x - c.x) * (c.y - d.y) - (a.y - c.y) * (c.x - d.x)) / det;
+      const u = -((a.x - b.x) * (a.y - c.y) - (a.y - b.y) * (a.x - c.x)) / det;
+      return t > 0 && t < 1 && u > 0;
+    }
+  }
+
+  polysIntersect(p1, p2) {
+    for (let i = 0; i < p1.length; i++) {
+      for (let j = 0; j < p2.length; j++) {
+        if (
+          this.linesIntersect(
+            p1[i],
+            p1[(i + 1) % p1.length],
+            p2[j],
+            p2[(j + 1) % p2.length]
+          )
+        ) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  #checkCollision(roadBorders, traffic) {
     for (let i = 0; i < roadBorders.length; i++) {
       const border = roadBorders[i];
       const touch = getIntersection(
@@ -53,7 +88,15 @@ class Car {
         return true;
       }
     }
-    return false;
+
+    for (let i = 0; i < traffic.length; i++) {
+      const car = traffic[i];
+      if (car != this) {
+        if (polysIntersect(this.polygon, car.polygon)) {
+          return true;
+        }
+      }
+    }
   }
 
   #createPolygon() {
@@ -80,6 +123,10 @@ class Car {
       y: this.y - Math.cos(Math.PI + this.angle + alpha) * rad,
     });
     return points;
+  }
+
+  setTarget(target) {
+    this.target = target;
   }
 
   #move() {
@@ -148,7 +195,8 @@ class Car {
     }
 
     ctx.fill();
-
-    this.sensor.draw(ctx);
+    if (this.sensor) {
+      this.sensor.draw(ctx);
+    }
   }
 }
