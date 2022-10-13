@@ -14,6 +14,16 @@ const car = new Car(road.getLaneCenter(1), 100, 30, 50);
 animate();
 
 function animate() {
+  if (car.damaged) {
+    setTimeout(function () {
+      car.x = road.getLaneCenter(1);
+      car.speed = 5;
+      car.angle = 0;
+      car.damaged = false;
+      let message = document.getElementById("message");
+      message.style.display = "none";
+    }, 1000);
+  }
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   car.update(road.borders);
   canvas.height = window.innerHeight;
