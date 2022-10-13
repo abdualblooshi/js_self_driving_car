@@ -75,4 +75,19 @@ class Level {
     }
     return child;
   }
+
+  static mutate(level) {
+    for (let i = 0; i < level.inputs.length; i++) {
+      for (let j = 0; j < level.outputs.length; j++) {
+        if (Math.random() < 0.1) {
+          level.weights[i][j] = Math.random() * 2 - 1;
+        }
+      }
+    }
+    for (let i = 0; i < level.biases.length; i++) {
+      if (Math.random() < 0.1) {
+        level.biases[i] = Math.random() * 2 - 1;
+      }
+    }
+  }
 }
