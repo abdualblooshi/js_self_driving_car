@@ -24,8 +24,13 @@ const traffic = generateRandomCars(100);
 traffic.push(new Car(road.getLaneCenter(1), -200, 30, 50, "DUMMY", 2.5, 2));
 
 let bestCar = cars[0];
-if (localStorage.getItem("bestCar")) {
-  bestCar.brain = JSON.parse(localStorage.getItem("bestCar"));
+if (localStorage.getItem("bestBrain")) {
+  for (let i = 0; i < cars.length; i++) {
+    cars[i].brain = JSON.parse(localStorage.getItem("bestBrain"));
+    if (i != 0) {
+      NeuralNetwork.mutate(cars[i].brain, 1);
+    }
+  }
 }
 
 function setMessage(title, text) {
@@ -74,10 +79,10 @@ function generateNetworkCars(N) {
 animate();
 
 function store() {
-  const bestCar = cars.find(
+  const bestBrain = cars.find(
     (car) => car.y == Math.min(...cars.map((car) => car.y))
   );
-  localStorage.setItem("bestBrain", JSON.stringify(bestCar.brain));
+  localStorage.setItem("bestBrain", JSON.stringify(bestBrain.brain));
   setMessage("💿 Stored", "The best car's brain has been stored");
 }
 
