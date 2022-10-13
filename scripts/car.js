@@ -41,16 +41,6 @@ class Car {
     }
     if (this.damaged) {
       this.isMoving = false;
-      let message = document.getElementById("message");
-      let messageText = document.getElementById("messageText");
-      let title = document.getElementById("title");
-      title.style.display = "none";
-      message.style.display = "flex";
-      message.style.flexDirection = "column";
-      message.style.alignItems = "center";
-      message.style.justifyContent = "center";
-      message.style.height = "50px";
-      messageText.innerHTML = "<h1>💥 You crashed!</h1>";
     }
     if (this.sensor) {
       this.sensor.update(roadBorders, traffic);
@@ -178,8 +168,6 @@ class Car {
 
     if (this.speed != 0) {
       this.isMoving = true;
-      let message = document.getElementById("message");
-      message.style.display = "none";
       const flip = this.speed > 0 ? 1 : -1;
       if (this.controls.left) {
         this.angle += 0.03 * flip;
@@ -201,7 +189,7 @@ class Car {
     this.y -= Math.cos(this.angle) * this.speed;
   }
 
-  draw(ctx) {
+  draw(ctx, drawSensor = false) {
     ctx.beginPath();
     ctx.moveTo(this.polygon[0].x, this.polygon[0].y);
     for (let i = 1; i < this.polygon.length; i++) {
@@ -216,7 +204,7 @@ class Car {
     }
 
     ctx.fill();
-    if (this.sensor) {
+    if (this.sensor && drawSensor) {
       this.sensor.draw(ctx);
     }
   }
