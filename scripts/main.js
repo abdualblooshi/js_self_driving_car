@@ -73,7 +73,7 @@ function passedCar(carLocation) {
 }
 
 function generateRandomLocation(carLocation) {
-  let randomLocation = randomIntFromInterval(
+  let randomLocation = differentRandomNumber(
     carLocation - 1000,
     carLocation - 500
   );
@@ -98,7 +98,7 @@ function generateTraffic(carLocation) {
       50,
       "DUMMY",
       2,
-      randomIntFromInterval(1, 3)
+      differentRandomNumber(1, 3)
     );
     traffic.push(randomCar);
     console.log(`Car generated at: ${randomLane} lane at: x=${randomLocation}`);
