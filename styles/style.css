@@ -59,7 +59,10 @@ body {
   justify-content: center;
   align-items: center;
 }
-
-#myCanvas {
+#carCanvas {
   background-color: lightgray;
+}
+
+#networkCanvas {
+  background-color: black;
 }
