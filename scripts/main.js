@@ -14,6 +14,13 @@ const car = new Car(road.getLaneCenter(1), 100, 30, 50);
 animate();
 
 function animate() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  car.update(road.borders);
+  canvas.height = window.innerHeight;
+  ctx.save();
+  ctx.translate(0, -car.y + canvas.height / 1.5);
+  road.draw(ctx);
+  car.draw(ctx);
   if (car.damaged) {
     setTimeout(function () {
       car.x = road.getLaneCenter(1);
@@ -24,13 +31,6 @@ function animate() {
       message.style.display = "none";
     }, 1000);
   }
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  car.update(road.borders);
-  canvas.height = window.innerHeight;
-  ctx.save();
-  ctx.translate(0, -car.y + canvas.height / 1.5);
-  road.draw(ctx);
-  car.draw(ctx);
   ctx.restore();
   requestAnimationFrame(animate);
 }
