@@ -11,7 +11,12 @@ canvas.width = 200;
 const ctx = canvas.getContext("2d");
 const road = new Road(canvas.width / 2, canvas.width * 0.9);
 const car = new Car(road.getLaneCenter(1), 100, 30, 50, "AI", 4);
-const traffic = [new Car(road.getLaneCenter(2), -100, 30, 50, "DUMMY", 2, 3)];
+const traffic = [new Car(road.getLaneCenter(1), -200, 30, 50, "DUMMY", 2.5, 4)];
+traffic.push(
+  new Car(road.getLaneCenter(1), -1300, 30, 50, "DUMMY", 2.5, 1),
+  new Car(road.getLaneCenter(2), -600, 30, 50, "DUMMY", 2.5, 1),
+  new Car(road.getLaneCenter(0), -800, 30, 50, "DUMMY", 2.5, 1)
+);
 let carLocation = car.y;
 setTimeout(() => {
   setInterval(() => {
