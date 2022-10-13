@@ -35,4 +35,8 @@ class Level {
       level.biases[i] = Math.random() * 2 - 1;
     }
   }
+
+  static #sigmoid(x) {
+    return 1 / (1 + Math.exp(-x));
+  }
 }
