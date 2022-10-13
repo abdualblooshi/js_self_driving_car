@@ -13,9 +13,6 @@ class Controls {
         this.#addKeyboardListeners();
         this.#addTouchListeners();
         break;
-      case "AI":
-        this.#addAILogic();
-        break;
       case "DUMMY":
         this.#dummyControls();
         break;
