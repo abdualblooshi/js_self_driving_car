@@ -39,4 +39,40 @@ class Level {
   static #sigmoid(x) {
     return 1 / (1 + Math.exp(-x));
   }
+
+  static feedForward(givenInputs, level) {
+    for (let i = 0; i < level.inputs.length; i++) {
+      level.inputs[i] = givenInputs[i];
+    }
+    for (let i = 0; i < level.outputs.length; i++) {
+      let sum = 0;
+      for (let j = 0; j < level.inputs.length; j++) {
+        sum += level.inputs[j] * level.weights[j][i];
+      }
+      sum += level.biases[i];
+      level.outputs[i] = Level.#sigmoid(sum);
+    }
+    return level.outputs;
+  }
+
+  static crossover(parent1, parent2) {
+    let child = new Level(parent1.inputs.length, parent1.outputs.length);
+    for (let i = 0; i < child.inputs.length; i++) {
+      for (let j = 0; j < child.outputs.length; j++) {
+        if (Math.random() < 0.5) {
+          child.weights[i][j] = parent1.weights[i][j];
+        } else {
+          child.weights[i][j] = parent2.weights[i][j];
+        }
+      }
+    }
+    for (let i = 0; i < child.biases.length; i++) {
+      if (Math.random() < 0.5) {
+        child.biases[i] = parent1.biases[i];
+      } else {
+        child.biases[i] = parent2.biases[i];
+      }
+    }
+    return child;
+  }
 }
