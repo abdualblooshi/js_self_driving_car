@@ -10,11 +10,15 @@ canvas.width = 200;
 
 const ctx = canvas.getContext("2d");
 const road = new Road(canvas.width / 2, canvas.width * 0.9);
-const car = new Car(road.getLaneCenter(1), 100, 30, 50, "KEYS", 2.75);
+const car = new Car(road.getLaneCenter(1), 100, 30, 50, "KEYS", 5);
 const traffic = [new Car(road.getLaneCenter(1), -100, 30, 50, "AI", 2)];
 let carLocation = car.y;
+setTimeout(() => {
+  setInterval(() => {
+    generateTraffic(carLocation);
+  }, 1000);
+}, 100);
 animate();
-setInterval(generateTraffic, 3000, carLocation);
 
 function animate() {
   traffic.forEach((car) => {
@@ -38,6 +42,8 @@ function animate() {
       reloadOnce();
     }, 2000);
   }
+  carLocation = car.y;
+  console.log(carLocation);
   car.draw(ctx);
   ctx.restore();
   requestAnimationFrame(animate);
@@ -56,6 +62,12 @@ function reloadOnce() {
   if (!reloaded) reloadGame();
 }
 
+function passedCar(carLocation) {
+  if (Math.abs(carLocation) > 1000) {
+    traffic.shift();
+  }
+}
+
 function generateTraffic(carLocation) {
   let random = Math.random();
   if (random < 0.1) {
@@ -69,6 +81,6 @@ function generateTraffic(carLocation) {
       2
     );
     traffic.push(randomCar);
-    console.log("Car Generated");
+    console.log(`Car generated at ${randomLane} lane and ${carLocation}`);
   }
 }
