@@ -5,6 +5,14 @@ class NeuralNetwork {
       this.levels.push(new Level(neuronCounts[i], neuronCounts[i + 1]));
     }
   }
+
+  static feedForward(network, inputs) {
+    let outputs = inputs;
+    for (let i = 0; i < network.levels.length; i++) {
+      outputs = Level.feedForward(network.levels[i], outputs);
+    }
+    return outputs;
+  }
 }
 
 class Level {
