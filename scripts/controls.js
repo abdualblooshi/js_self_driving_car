@@ -16,7 +16,18 @@ class Controls {
       case "AI":
         this.#addAILogic();
         break;
+      case "DUMMY":
+        this.#dummyControls();
+        break;
     }
+  }
+
+  #dummyControls() {
+    this.forward = true;
+    this.left = false;
+    this.right = false;
+    this.reverse = false;
+    this.straighten = false;
   }
 
   #addAILogic() {

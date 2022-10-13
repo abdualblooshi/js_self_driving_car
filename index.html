@@ -17,17 +17,18 @@
         
     </head>
     <body>
-        <div id="leftSide">
-        </div>
-        <div id="rightSide">
+        <canvas id="carCanvas"></canvas>
+        <div id="verticalButtons">
+            <button id="upButton" onclick="store()" class="button">💾 Save</button>
+            <button id="downButton" onclick="discard()" class="button">🗑️ Discard</button>
         </div>
         <div id="message">
             <h1 id="title">🚗Self Driving Car</h1>
-            <h3 id="messageText">Use the arrow keys to drive the car or tap the screen for mobile devices</h3>
+            <h3 id="messageText">Simulation will start in a bit...</h3>
         </div>
-        <canvas id="myCanvas">
-
-        </canvas>
+        <canvas id="networkCanvas"></canvas>
+        <script src="scripts/visualizer.js"></script>
+        <script src="scripts/network.js"></script>
         <script src="scripts/sensor.js"></script>
         <script src="scripts/utils.js"></script>
         <script src="scripts/road.js"></script>
@@ -36,9 +37,3 @@
         <script src="scripts/main.js"></script>
     </body>
 </html>
-
-<!---
-TODO:
-- Add a way to change the car's color
-- Add a tutorial on how to use the controls that pops up when you first load the page
--->

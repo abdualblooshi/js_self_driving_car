@@ -60,3 +60,35 @@ function randomIntFromInterval(min, max) {
   // min and max included
   return Math.floor(Math.random() * (max - min + 1) + min);
 }
+
+function differentRandomNumber(min, max) {
+  // Generates a random number between min and max that is different from the previous one
+  // The function keeps track of the previous number in a global variable
+  // If the function is called without arguments, it will return the previous number
+  // If the function is called with arguments, it will return a new random number
+  // that is different from the previous one
+  if (min != undefined && max != undefined) {
+    let newNumber = randomIntFromInterval(min, max);
+    while (newNumber == differentRandomNumber.previous) {
+      newNumber = randomIntFromInterval(min, max);
+    }
+    differentRandomNumber.previous = newNumber;
+    return newNumber;
+  } else {
+    return differentRandomNumber.previous;
+  }
+}
+
+function getRGBA(value) {
+  // Returns a string with the rgba value for the given value
+  const alpha = Math.abs(value);
+  const R = value < 0 ? 0 : 255;
+  const G = R;
+  const B = value > 0 ? 0 : 255;
+  return "rgba(" + R + "," + G + "," + B + "," + alpha + ")";
+}
+
+function distanceBetweenTwoCars(car1, car2) {
+  // Returns the distance between two cars
+  return Math.abs(car1.y - car2.y);
+}

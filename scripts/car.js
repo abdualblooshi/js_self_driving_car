@@ -1,22 +1,34 @@
 class Car {
-  constructor(x, y, width, height, controlType, maxSpeed = 3) {
+  constructor(
+    x,
+    y,
+    width,
+    height,
+    controlType,
+    maxSpeed = 3,
+    acceleration = 0.1
+  ) {
     this.x = x;
     this.y = y;
     this.width = width;
     this.height = height;
 
     this.speed = 0;
-    this.acceleration = 0.1;
+    this.acceleration = acceleration;
     this.maxSpeed = maxSpeed;
     this.friction = 0.05;
     this.angle = 0;
     this.damaged = false;
     this.isMoving = false;
+    this.distanceCovered = 0;
+
+    this.useBrain = controlType == "AI";
 
     this.target = null;
 
-    if (controlType == "KEYS") {
+    if (controlType != "DUMMY") {
       this.sensor = new Sensor(this);
+      this.brain = new NeuralNetwork([this.sensor.rayCount, 6, 4]);
     }
 
     this.controls = new Controls(controlType);
@@ -30,19 +42,22 @@ class Car {
     }
     if (this.damaged) {
       this.isMoving = false;
-      let message = document.getElementById("message");
-      let messageText = document.getElementById("messageText");
-      let title = document.getElementById("title");
-      title.style.display = "none";
-      message.style.display = "flex";
-      message.style.flexDirection = "column";
-      message.style.alignItems = "center";
-      message.style.justifyContent = "center";
-      message.style.height = "50px";
-      messageText.innerHTML = "<h1>💥 You crashed!</h1>";
     }
     if (this.sensor) {
       this.sensor.update(roadBorders, traffic);
+      this.distanceToCarInfront = this.sensor.distanceToCarInfront;
+
+      const offsets = this.sensor.readings.map((reading) =>
+        reading === null ? 0 : 1 - reading.offset
+      );
+      const outputs = NeuralNetwork.feedForward(offsets, this.brain);
+
+      if (this.useBrain) {
+        this.controls.forward = outputs[0];
+        this.controls.left = outputs[1];
+        this.controls.right = outputs[2];
+        this.controls.reverse = outputs[3];
+      }
     }
   }
 
@@ -156,8 +171,6 @@ class Car {
 
     if (this.speed != 0) {
       this.isMoving = true;
-      let message = document.getElementById("message");
-      message.style.display = "none";
       const flip = this.speed > 0 ? 1 : -1;
       if (this.controls.left) {
         this.angle += 0.03 * flip;
@@ -177,9 +190,10 @@ class Car {
 
     this.x -= Math.sin(this.angle) * this.speed;
     this.y -= Math.cos(this.angle) * this.speed;
+    this.distanceCovered += this.speed;
   }
 
-  draw(ctx) {
+  draw(ctx, drawSensor = false) {
     ctx.beginPath();
     ctx.moveTo(this.polygon[0].x, this.polygon[0].y);
     for (let i = 1; i < this.polygon.length; i++) {
@@ -194,7 +208,7 @@ class Car {
     }
 
     ctx.fill();
-    if (this.sensor) {
+    if (this.sensor && drawSensor) {
       this.sensor.draw(ctx);
     }
   }
