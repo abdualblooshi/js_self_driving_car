@@ -159,7 +159,6 @@ class Car {
       let message = document.getElementById("message");
       message.style.display = "none";
       const flip = this.speed > 0 ? 1 : -1;
-      console.log(this.angle);
       if (this.controls.left) {
         this.angle += 0.03 * flip;
       }
