@@ -27,11 +27,13 @@ class Car {
       this.isMoving = false;
       let message = document.getElementById("message");
       let messageText = document.getElementById("messageText");
+      let title = document.getElementById("title");
+      title.style.display = "none";
       message.style.display = "flex";
       message.style.flexDirection = "column";
       message.style.alignItems = "center";
       message.style.justifyContent = "center";
-      messageText.innerHTML = "💥 You crashed!";
+      messageText.innerHTML = "<h1>💥 You crashed!</h1>";
     }
 
     this.sensor.update(roadBorders);
