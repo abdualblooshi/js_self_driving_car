@@ -18,6 +18,14 @@
     </head>
     <body>
         <canvas id="carCanvas"></canvas>
+        <div id="verticalButtons">
+            <button id="upButton" onclick="store()" class="button">💾 Save</button>
+            <button id="downButton" onclick="discard()" class="button">🗑️ Discard</button>
+        </div>
+        <div id="message">
+            <h1 id="title">🚗Self Driving Car</h1>
+            <h3 id="messageText">Simulation will start in a bit...</h3>
+        </div>
         <canvas id="networkCanvas"></canvas>
         <script src="scripts/visualizer.js"></script>
         <script src="scripts/network.js"></script>
