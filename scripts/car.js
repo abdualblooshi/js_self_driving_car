@@ -11,6 +11,7 @@ class Car {
     this.friction = 0.05;
     this.angle = 0;
     this.damaged = false;
+    this.isMoving = false;
 
     this.sensor = new Sensor(this);
     this.controls = new Controls();
@@ -21,6 +22,16 @@ class Car {
       this.#move();
       this.polygon = this.#createPolygon();
       this.damaged = this.#checkCollision(roadBorders);
+    }
+    if (this.damaged) {
+      this.isMoving = false;
+      let message = document.getElementById("message");
+      let messageText = document.getElementById("messageText");
+      message.style.display = "flex";
+      message.style.flexDirection = "column";
+      message.style.alignItems = "center";
+      message.style.justifyContent = "center";
+      messageText.innerHTML = "💥 You crashed!";
     }
 
     this.sensor.update(roadBorders);
@@ -94,6 +105,9 @@ class Car {
     }
 
     if (this.speed != 0) {
+      this.isMoving = true;
+      let message = document.getElementById("message");
+      message.style.display = "none";
       const flip = this.speed > 0 ? 1 : -1;
       console.log(this.angle);
       if (this.controls.left) {
@@ -125,6 +139,11 @@ class Car {
     if (this.damaged) {
       ctx.fillStyle = "#FF0000";
     }
+
+    if (!this.damaged) {
+      ctx.fillStyle = "#000000";
+    }
+
     ctx.fill();
 
     this.sensor.draw(ctx);
