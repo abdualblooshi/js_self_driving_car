@@ -61,6 +61,7 @@ class Level {
     for (let i = 0; i < level.inputs.length; i++) {
       level.inputs[i] = givenInputs[i];
     }
+
     for (let i = 0; i < level.outputs.length; i++) {
       let sum = 0;
       for (let j = 0; j < level.inputs.length; j++) {
@@ -69,6 +70,13 @@ class Level {
       sum += level.biases[i];
       level.outputs[i] = Level.#sigmoid(sum);
     }
+
+    if (sum > level.biases[i]) {
+      level.outputs[i] = 1;
+    } else {
+      level.outputs[i] = 0;
+    }
+
     return level.outputs;
   }
 }
