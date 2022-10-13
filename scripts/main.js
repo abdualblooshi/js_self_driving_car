@@ -11,7 +11,7 @@ canvas.width = 200;
 const ctx = canvas.getContext("2d");
 const road = new Road(canvas.width / 2, canvas.width * 0.9);
 const car = new Car(road.getLaneCenter(1), 100, 30, 50, "KEYS", 4);
-const traffic = [new Car(road.getLaneCenter(2), -100, 30, 50, "AI", 2)];
+const traffic = [new Car(road.getLaneCenter(2), -100, 30, 50, "AI", 2, 3)];
 let carLocation = car.y;
 setTimeout(() => {
   setInterval(() => {
@@ -43,7 +43,6 @@ function animate() {
     }, 2000);
   }
   carLocation = car.y;
-  console.log(carLocation);
   car.draw(ctx);
   ctx.restore();
   requestAnimationFrame(animate);
@@ -71,13 +70,15 @@ function passedCar(carLocation) {
 function generateRandomLocation(carLocation) {
   let randomLocation = randomIntFromInterval(
     carLocation - 1000,
-    carLocation + 1000
+    carLocation - 500
   );
-  if (randomLocation === carLocation) {
-    randomLocation += 300;
-  }
-
-  return randomLocation;
+  let newLocation = randomLocation;
+  traffic.forEach((car) => {
+    if (Math.abs(car.y - randomLocation) < 100) {
+      newLocation = generateRandomLocation(carLocation);
+    }
+  });
+  return newLocation;
 }
 
 function generateTraffic(carLocation) {
@@ -91,25 +92,10 @@ function generateTraffic(carLocation) {
       30,
       50,
       "AI",
-      2
+      2,
+      randomIntFromInterval(1, 3)
     );
     traffic.push(randomCar);
-    console.log(
-      `Front: Car generated at: ${randomLane} lane at: x=${randomLocation}`
-    );
-    let backRandomLocation = generateRandomLocation(carLocation);
-    let backRandomLane = Math.floor(Math.random() * 3);
-    let backRandomCar = new Car(
-      road.getLaneCenter(backRandomLane),
-      backRandomLocation,
-      30,
-      50,
-      "AI",
-      4
-    );
-    traffic.push(backRandomCar);
-    console.log(
-      `Back: Car generated at: ${backRandomCar} lane at: x=${backRandomCar}`
-    );
+    console.log(`Car generated at: ${randomLane} lane at: x=${randomLocation}`);
   }
 }
