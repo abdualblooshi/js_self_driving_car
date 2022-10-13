@@ -4,6 +4,10 @@
   - contains the simulation loop and render functions
 */
 
+const message = document.getElementById("message");
+const messageTitle = document.getElementById("title");
+const messageText = document.getElementById("messageText");
+
 const carCanvas = document.getElementById("carCanvas");
 carCanvas.height = window.innerHeight;
 carCanvas.width = 200;
@@ -18,6 +22,27 @@ const road = new Road(carCanvas.width / 2, carCanvas.width * 0.9);
 const cars = generateNetworkCars(100);
 const traffic = generateRandomCars(100);
 traffic.push(new Car(road.getLaneCenter(1), -200, 30, 50, "DUMMY", 2.5, 2));
+
+let bestCar = cars[0];
+if (localStorage.getItem("bestCar")) {
+  bestCar.brain = JSON.parse(localStorage.getItem("bestCar"));
+}
+
+function setMessage(title, text) {
+  message.style.display = "flex";
+  messageTitle.innerHTML = title;
+  messageText.innerHTML = text;
+  animateMessage();
+}
+
+function animateMessage() {
+  setTimeout(() => {
+    message.style.display = "flex";
+  }, 3500);
+  setTimeout(() => {
+    message.style.display = "none";
+  }, 3500);
+}
 
 function generateRandomCars(N) {
   let cars = [];
@@ -52,11 +77,13 @@ function store() {
   const bestCar = cars.find(
     (car) => car.y == Math.min(...cars.map((car) => car.y))
   );
-  localStorage.setItem("bestCar", JSON.stringify(bestCar));
+  localStorage.setItem("bestBrain", JSON.stringify(bestCar.brain));
+  setMessage("💿 Stored", "The best car's brain has been stored");
 }
 
 function discard() {
-  localStorage.removeItem("bestCar");
+  localStorage.removeItem("bestBrain");
+  setMessage("🗑️ Discarded", "The best car's brain has been discarded");
 }
 
 function animate(time) {
