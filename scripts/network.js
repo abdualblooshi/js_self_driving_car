@@ -6,10 +6,10 @@ class NeuralNetwork {
     }
   }
 
-  static feedForward(network, inputs) {
-    let outputs = inputs;
-    for (let i = 0; i < network.levels.length; i++) {
-      outputs = Level.feedForward(network.levels[i], outputs);
+  static feedForward(givenInputs, network) {
+    let outputs = Level.feedForward(givenInputs, network.levels[0]);
+    for (let i = 1; i < network.levels.length; i++) {
+      outputs = Level.feedForward(outputs, network.levels[i]);
     }
     return outputs;
   }
@@ -61,22 +61,21 @@ class Level {
     for (let i = 0; i < level.inputs.length; i++) {
       level.inputs[i] = givenInputs[i];
     }
-
     for (let i = 0; i < level.outputs.length; i++) {
       let sum = 0;
       for (let j = 0; j < level.inputs.length; j++) {
         sum += level.inputs[j] * level.weights[j][i];
       }
-      sum += level.biases[i];
-      level.outputs[i] = Level.#sigmoid(sum);
-    }
 
-    if (sum > level.biases[i]) {
-      level.outputs[i] = 1;
-    } else {
-      level.outputs[i] = 0;
-    }
+      if (sum > level.biases[i]) {
+        level.outputs[i] = 1;
+      } else {
+        level.outputs[i] = 0;
+      }
 
+      //level.outputs[i] = Level.#sigmoid(sum + level.biases[i]);
+      // this is the sigmoid function that is used to normalize the output of the neuron
+    }
     return level.outputs;
   }
 }
