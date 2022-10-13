@@ -87,3 +87,8 @@ function getRGBA(value) {
   const B = value > 0 ? 0 : 255;
   return "rgba(" + R + "," + G + "," + B + "," + alpha + ")";
 }
+
+function distanceBetweenTwoCars(car1, car2) {
+  // Returns the distance between two cars
+  return Math.abs(car1.y - car2.y);
+}
