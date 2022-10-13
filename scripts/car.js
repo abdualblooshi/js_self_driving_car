@@ -20,6 +20,7 @@ class Car {
     this.angle = 0;
     this.damaged = false;
     this.isMoving = false;
+    this.distanceCovered = 0;
 
     this.useBrain = controlType == "AI";
 
@@ -44,6 +45,8 @@ class Car {
     }
     if (this.sensor) {
       this.sensor.update(roadBorders, traffic);
+      this.distanceToCarInfront = this.sensor.distanceToCarInfront;
+
       const offsets = this.sensor.readings.map((reading) =>
         reading === null ? 0 : 1 - reading.offset
       );
@@ -187,6 +190,7 @@ class Car {
 
     this.x -= Math.sin(this.angle) * this.speed;
     this.y -= Math.cos(this.angle) * this.speed;
+    this.distanceCovered += this.speed;
   }
 
   draw(ctx, drawSensor = false) {
