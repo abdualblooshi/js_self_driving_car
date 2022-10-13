@@ -1,3 +1,12 @@
+class NeuralNetwork {
+  constructor(neuronCounts) {
+    this.levels = [];
+    for (let i = 0; i < neuronCounts.length - 1; i++) {
+      this.levels.push(new Level(neuronCounts[i], neuronCounts[i + 1]));
+    }
+  }
+}
+
 class Level {
   // - Neural Network Level
   // - This level is a neural network that learns to play the game
@@ -53,41 +62,5 @@ class Level {
       level.outputs[i] = Level.#sigmoid(sum);
     }
     return level.outputs;
-  }
-
-  static crossover(parent1, parent2) {
-    let child = new Level(parent1.inputs.length, parent1.outputs.length);
-    for (let i = 0; i < child.inputs.length; i++) {
-      for (let j = 0; j < child.outputs.length; j++) {
-        if (Math.random() < 0.5) {
-          child.weights[i][j] = parent1.weights[i][j];
-        } else {
-          child.weights[i][j] = parent2.weights[i][j];
-        }
-      }
-    }
-    for (let i = 0; i < child.biases.length; i++) {
-      if (Math.random() < 0.5) {
-        child.biases[i] = parent1.biases[i];
-      } else {
-        child.biases[i] = parent2.biases[i];
-      }
-    }
-    return child;
-  }
-
-  static mutate(level) {
-    for (let i = 0; i < level.inputs.length; i++) {
-      for (let j = 0; j < level.outputs.length; j++) {
-        if (Math.random() < 0.1) {
-          level.weights[i][j] = Math.random() * 2 - 1;
-        }
-      }
-    }
-    for (let i = 0; i < level.biases.length; i++) {
-      if (Math.random() < 0.1) {
-        level.biases[i] = Math.random() * 2 - 1;
-      }
-    }
   }
 }
