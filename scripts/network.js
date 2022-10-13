@@ -6,6 +6,19 @@ class NeuralNetwork {
     }
   }
 
+  static mutate(network, amount = 1) {
+    network.levels.forEach((level) => {
+      for (let i = 0; i < level.inputs.length; i++) {
+        for (let j = 0; j < level.outputs.length; j++) {
+          level.weights[i][j] += (Math.random() * 2 - 1) * amount;
+        }
+      }
+      for (let i = 0; i < level.biases.length; i++) {
+        level.biases[i] += (Math.random() * 2 - 1) * amount;
+      }
+    });
+  }
+
   static feedForward(givenInputs, network) {
     let outputs = Level.feedForward(givenInputs, network.levels[0]);
     for (let i = 1; i < network.levels.length; i++) {
