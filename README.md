@@ -8,3 +8,5 @@ This is an open source 2D self driving car simulator created using Plain JavaScr
 ## Running the program
 
 Just launch `index.html` in any web browser that you prefer! or you could access the program on the [demo](https://gitanimous.github.io/js_self_driving_car/).
+
+Basically use the Save button to save the futherst car simulation, otherwise press the discard button to delete the current brain saved in the localStorage
